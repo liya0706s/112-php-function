@@ -12,7 +12,7 @@
 // echo diamond(5);
 // echo rectangle(7);
 
-stars('正三角形',7);
+stars('正三角形',5);
 stars('菱形',7);
 stars('矩形',7);
 stars('矩形對角線',7);
@@ -41,7 +41,7 @@ switch($shape){
 function eq_triangle($size){
     for ($i = 0; $i < $size; $i++) {
         for ($j = 0; $j < ($size - 1 - $i); $j++) {
-            echo " &nbsp;";
+            echo "&nbsp;";
         }
         for ($k = 0; $k < ($i * 2 + 1); $k++) {
             echo "*";
