@@ -15,6 +15,10 @@ function sum($a, $b){
     // 變數可以拿來使用
 }
 
+// $sum=sum(17);
+// echo "總和是:". $sum;
+// 定義函式要有兩個參數(定義函式中參數的數量 和 呼叫函式的參數數量 要一致)
+// 網頁會顯示Fetal error:Uncaught ArgCountError:Too few args to func sum()
 $sum = sum(10, 20);
 echo "總和是:" . $sum;
 echo "<hr>";
@@ -22,21 +26,26 @@ $sum = sum(17, 68);
 echo "總和是:" . $sum;
 echo "<hr>";
 echo "總和是:" . sum(56, 77);
+// sum(56,77) 函式本身就可以放在字串裡面，函式他就是一個變數
 ?>
 
 
 <h2>不定參數的用法</h2>
+ <!-- 不定的意思是，不一定的什麼參數， -->
+ <p>不定參數加總</p>
 <?php
 function sum2(...$arg){
+    // $arg參數名稱也可自訂隨便命名，例如:$jhkhidt
+    // ...$arg放在宣告函式參數的地方，叫做不定參數，是化作陣列顯示
+    // ...$arg放在外面其他地方叫，解構賦值(展開式運算符)，是個陣列
     $sum = 0;
     foreach ($arg as $num) {
-        // 當前的陣列元素將被賦值給 $num 變數
+        // 當前的陣列內元素值 被賦值給 $num 變數
+        // 要先判斷參數是否為數字，只有數字的才會加總，否則不管它
         if (is_numeric($num)) {
             $sum += $num;
             // print_r($arg);
-            // 列出不定參數陣列
-            // $total=array_sum($arg);
-            // echo $total;
+            // 列出不定參數真的是陣列
         }
     }
     return $sum;
@@ -49,11 +58,10 @@ echo "<hr>";
 echo sum2(6, 7, 'djigoijel', 8);
 echo "<hr>";
 
-// 不定means(不一定要arg什麼參數)，$arg參數名稱也可自訂命名
-// ...$arg 解構賦值(展開運算符)，是個陣列
 ?>
 
 <h3>用chatgpt查到加總不定參數陣列的方法</h3>
+<p>無法確認輸入的值如果不是數字會有bug</p>
 <?php
 function sum55(...$arg){
     $total=array_sum($arg);
