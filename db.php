@@ -13,10 +13,11 @@ dd($rows);
 // null 是要有參數，可以是空的
 function all($table=null, $where='',$other=''){
 // where預設為空有彈性，可以不設計where條件空白
-    $sql= "select * from `$table`";
+    
     // where中的重複部分
     $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
     $pdo = new PDO($dsn, 'root', '');
+    $sql= "select * from `$table`";
 
     // 要先判斷有這個資料表，且不是空的
     if (isset($table) && !empty($table)) {
