@@ -2,8 +2,7 @@
 <?php
 $c = 20;
 // $d=50;
-function sum($a, $b)
-{
+function sum($a, $b){
     global $c;
     // 要宣告，有一個全域(括號外)的變數$c是可以使用的，以下賦值才成立
     $sum = $a + $b + $c;
