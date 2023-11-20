@@ -21,13 +21,17 @@
 // echo "<h3>相同條件使用 find()</h3>";
 // dd($row);
 
+// 2023-11-20 用find() 測試pdo.php
+$row = find('students', ['dept' => '1', 'graduate_at' => '23']);
+dd($row);
+
 // 2023-11-20 update()
 // $up=update("students", '3',['dept'=>'16','name'=>'漲明珠']);
 // $up = update("students", '3', ['dept' => '16', 'name' => '漲明珠']);
 // dd($up);
 
 // 2023-11-20 del()
-del('students',['dept'=>'5','status_code'=>'001']);
+// del('students',['dept'=>'5','status_code'=>'001']);
 // 呼叫帶入參數
 
 // 2023-11-20 insert()
@@ -35,13 +39,14 @@ del('students',['dept'=>'5','status_code'=>'001']);
 
 // 定義函式 all() 用來取得學生資料
 // null 是要有參數，可以是空的
-function all($table = null, $where = '', $other = '')
-{
+function all($table = null, $where = '', $other = ''){
     // where預設為空有彈性，可以不設計where條件空白
 
     // where中的重複部分
     $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
     $pdo = new PDO($dsn, 'root', '');
+
+
     $sql = "select * from `$table`";
 
     // 要先判斷有這個資料表，且不是空的;若
@@ -68,7 +73,8 @@ function all($table = null, $where = '', $other = '')
             // 資料表名稱可以改成$table參數
         }
         $sql .= $other;
-        echo 'all=>' . $sql;
+        // echo 'all=>' . $sql;
+        // echo for測試用
         $rows = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         // 整合所有語句
         // associate"關聯"名稱變成只拿 欄位名稱，不拿索引
@@ -103,6 +109,8 @@ function find($table, $id)
 
     // 把find()語法列出來，測試用而已，真正作品不要顯示出來
     echo 'find=>' . $sql;
+        // echo for測試用
+
     $row = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     return $row;
     // return定義函式結束，要開始呼叫
@@ -141,7 +149,9 @@ function update($table, $id, $cols)
         echo "錯誤:參數的資料型態必須是數字或是陣列";
         // 如果id連數字都不是，顯示錯誤訊息
     }
-    echo $sql;
+    // echo $sql;
+        // echo for測試用
+
     return $pdo->exec($sql);
     // return回傳指令影響了...列數
     // 結果只有數字(代表影響了幾列)
@@ -177,9 +187,12 @@ function insert($table, $values){
 // del() 類似find()
 function del($table,$id){
     // 判斷參數id是不是陣列
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
+
+    // $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
+    // $pdo = new PDO($dsn, 'root', '');
     // 要抽出來為了程式撰寫和維護方便，不用改很多次
+    // pdo function最後要returnc回傳值，才可以再呼叫他
+    include "pdo.php";
 
     $sql="delete from `$table` where";
     // 把共同的部分拆出來
@@ -200,7 +213,9 @@ function del($table,$id){
     }else{
         echo "錯誤:參數的資料型態必須是數字或陣列";
     }
-    echo $sql;
+    // echo $sql;
+        // echo for測試用
+
     return $pdo->exec($sql);
 
     // $sql="delete from `$table` where `id`='?'";
