@@ -1,6 +1,10 @@
 <h1>自訂函式CRUD</h1>
 <?php
 
+date_default_timezone_set('Asia/Taipei');
+$dsn = "mysql:host=localhost;charset=utf8;dbname=school";
+$pdo = new PDO($dsn, 'root', '');
+
 // 呼叫 all() 函式，
 // 並將函式返回的值（所有學生資料的陣列）賦值給變數 $rows
 // 該情況下的像是，假設x=5;
@@ -49,7 +53,7 @@ function all($table = null, $where = '', $other = ''){
 
     $sql = "select * from `$table`";
 
-    // 要先判斷有這個資料表，且不是空的;若
+    // 要先判斷有這個資料表，且不是空的;若是陣列
     if (isset($table) && !empty($table)) {
 
         // where都有雷同的地方

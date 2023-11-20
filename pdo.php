@@ -13,8 +13,8 @@ $pdo = new PDO($dsn, 'root', '');
 在需要的函式裡面寫入 global $pdo; -->
 
 <!-- 三種方式去判斷:
-1. 單一變數global
-2. 多變數 用function簡化???
+1. 單一變數 global
+2. 多變數 用function簡化
 3. 很長一大串用include -->
 
 <!-- foreach也可以用function簡化 回傳foreach的結果 -->
