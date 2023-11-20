@@ -10,7 +10,7 @@ $pdo = new PDO($dsn, 'root', '');
 // 該情況下的像是，假設x=5;
 
 // 2023-11-17 定義函式all()
-// $rows = all('students', ['dept' => '1', 'graduate_at' => '23']);
+$rows = all('students', ['dept' => '1', 'graduate_at' => '23']);
 
 // find()-會回傳資料表 指定id的資料，因為很常使用
 // 指定條件之後的那一筆資料還有，例如唯一特定的帳號密碼
@@ -26,8 +26,8 @@ $pdo = new PDO($dsn, 'root', '');
 // dd($row);
 
 // 2023-11-20 用find() 測試pdo.php
-$row = find('students', ['dept' => '1', 'graduate_at' => '23']);
-dd($row);
+// $row = find('students', ['dept' => '1', 'graduate_at' => '23']);
+// dd($row);
 
 // 2023-11-20 update()
 // $up=update("students", '3',['dept'=>'16','name'=>'漲明珠']);
@@ -46,49 +46,55 @@ dd($row);
 function all($table = null, $where = '', $other = ''){
     // where預設為空有彈性，可以不設計where條件空白
 
-    // where中的重複部分
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
-
-
+    // $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
+    // $pdo = new PDO($dsn, 'root', '');
+    global $pdo;
     $sql = "select * from `$table`";
 
-    // 要先判斷有這個資料表，且不是空的;若是陣列
+    // 檢查是否提供了資料表名稱，確保 $table 存在且不為空
     if (isset($table) && !empty($table)) {
 
-        // where都有雷同的地方
-        // 形成sql句子之前要判斷where是否為陣列
+        // 檢查 $where 是否是陣列，如果是，表示有指定查詢條件
         if (is_array($where)) {
             /**陣列轉換成字串
              * ['dept'=>'2', 'graduate_at'=>12] => where `dept`='2' && `graduate_at` = '12'
              * $sql="select * from `table` from where `dept`='2' && `graduate_at` = '12'"
              */
+
+             // 檢查陣列是否不為空，如果不是空，表示有指定具體的查詢條件
             if (!empty($where)) {
-                // 是陣列而且不是空的
+                // 使用 foreach 遍歷陣列，將每個鍵值對轉換為 SQL 查詢中的條件
                 foreach ($where as $col => $value) {
+                    // 將每個條件添加到臨時陣列中，例如：`column_name`='value'
                     $tmp[] = "`$col`='$value'";
                 }
+                // 使用 join 函式將條件陣列用 "&&" 連接成字符串，並添加到 SQL 查詢語句中
                 $sql .= " where " . join(" && ", $tmp);
-            }   // 如果不是的話$tmp只是空陣列
-
-        } else {
-            // 當他是字串，原句子
-            $sql .= " $where";
-            // 資料表名稱可以改成$table參數
-        }
+            } else {
+                // 如果 $where 不是陣列，直接將其添加到 SQL 查詢語句中
+                $sql .= " $where";
+            }
+        // 將其他 SQL 語句（例如 ORDER BY、LIMIT 等）添加到 SQL 查詢語句中
         $sql .= $other;
-        // echo 'all=>' . $sql;
+
+        echo 'all=>' . $sql;
         // echo for測試用
+
+        // 使用 PDO 對象的 query 方法執行 SQL 查詢，並以關聯數組形式獲取結果集
         $rows = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         // 整合所有語句
         // associate"關聯"名稱變成只拿 欄位名稱，不拿索引
         // num 關聯名稱變成，只拿"索引"
         // 預設是both
+
+        // 返回查詢結果
         return $rows;
     } else {
+        // 如果沒有提供資料表名稱，輸出錯誤信息
         echo "錯誤:沒有指定的資料表名稱";
     }
 }
+
 
 // 2023-11-20 find()回傳一筆指定資料
 function find($table, $id)
@@ -113,7 +119,7 @@ function find($table, $id)
 
     // 把find()語法列出來，測試用而已，真正作品不要顯示出來
     echo 'find=>' . $sql;
-        // echo for測試用
+    // echo for測試用
 
     $row = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     return $row;
@@ -154,7 +160,7 @@ function update($table, $id, $cols)
         // 如果id連數字都不是，顯示錯誤訊息
     }
     // echo $sql;
-        // echo for測試用
+    // echo for測試用
 
     return $pdo->exec($sql);
     // return回傳指令影響了...列數
@@ -164,7 +170,8 @@ function update($table, $id, $cols)
 }
 
 // 2023-11-20 insert() 新增資料 語法: select
-function insert($table, $values){
+function insert($table, $values)
+{
     // $values參數代表，新增欄位的陣列
     $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
     $pdo = new PDO($dsn, 'root', '');
@@ -189,7 +196,8 @@ function insert($table, $values){
 
 // 2023-11-20 del() 刪除指令 可以刪除一筆或是多筆資料:
 // del() 類似find()
-function del($table,$id){
+function del($table, $id)
+{
     // 判斷參數id是不是陣列
 
     // $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
@@ -198,27 +206,27 @@ function del($table,$id){
     // pdo function最後要returnc回傳值，才可以再呼叫他
     include "pdo.php";
 
-    $sql="delete from `$table` where";
+    $sql = "delete from `$table` where";
     // 把共同的部分拆出來
     // 有where
 
-    if(is_array($id)){
+    if (is_array($id)) {
         // foreach目的:將陣列的key和value轉成sql需要的字串，
         // 才可以兜成給資料庫執行的指令
-        foreach($id as $col => $value){
-                $tmp[]="`$col`='$value'";
-                // 陣列轉成字串的顯示方式???
-                // 這邊為什麼又是撇號??不是單引號
-            }
-            $sql .= join(" && ",$tmp);
-    }else if(is_numeric($id)){
+        foreach ($id as $col => $value) {
+            $tmp[] = "`$col`='$value'";
+            // 陣列轉成字串的顯示方式???
+            // 這邊為什麼又是撇號??不是單引號
+        }
+        $sql .= join(" && ", $tmp);
+    } else if (is_numeric($id)) {
         // 不是陣列，是數字的話
-          $sql .= " `id`='$id'";
-    }else{
+        $sql .= " `id`='$id'";
+    } else {
         echo "錯誤:參數的資料型態必須是數字或陣列";
     }
     // echo $sql;
-        // echo for測試用
+    // echo for測試用
 
     return $pdo->exec($sql);
 
@@ -233,4 +241,5 @@ function dd($array)
     echo "<pre>";
     print_r($array);
     echo "</pre>";
+}
 }
