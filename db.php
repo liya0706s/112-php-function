@@ -113,7 +113,8 @@ function find($table, $id)
     if (is_array($id)) {
         foreach ($id as $col => $value) {
             $tmp[] = "`$col`='$value'";
-            // 取key要用單引號，因為要放到資料庫SQL語法裡面
+            // 取key是代表欄位名稱要用上引號`` ; 取value要用單引號''
+            // 因為要放到資料庫SQL語法裡面
         }
         $sql .= " where " . join(" && ", $tmp);
         // $sql .= " where ".join(" && ",[` `=>'',` `=>'' ,` `=>''])
