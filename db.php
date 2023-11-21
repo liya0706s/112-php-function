@@ -16,14 +16,24 @@ $rows = all('students', ['dept' => '1', 'graduate_at' => '23']);
 // 指定條件之後的那一筆資料還有，例如唯一特定的帳號密碼
 // 2023-11-20 find() 指定id的函式
 // 指定條件中，只要一筆資料的還有什麼???-->帳號密碼，或是比較私人資料庫中只有唯一性的
-// $row = find('students', ['dept' => '1', 'graduate_at' => '23']);
+$row = find('students', ['dept' => '1', 'graduate_at' => '23']);
 
-// echo "<h3>相同條件使用 all()</h3>";
+echo "<h3>相同條件使用 all()</h3>";
 // 呼叫函式輸出
-// dd($rows);
-// echo "<hr>";
-// echo "<h3>相同條件使用 find()</h3>";
-// dd($row);
+dd($rows);
+echo "<hr>";
+echo "<h3>相同條件使用 find()</h3>";
+dd($row);
+
+$row=find('students',['dept'=>'1','graduate_at'=>'23']);
+//$rows=all('students',['dept'=>'1','graduate_at'=>'23']);
+//echo "<h3>相同條件使用find()</h3>";
+//dd($row);
+//echo "<hr>";;
+//echo "<h3>相同條件使用all()</h3>";
+//dd($rows);
+
+
 
 // 2023-11-20 用find() 測試pdo.php
 // $row = find('students', ['dept' => '1', 'graduate_at' => '23']);
@@ -41,7 +51,8 @@ $rows = all('students', ['dept' => '1', 'graduate_at' => '23']);
 // 2023-11-20 insert()
 // insert('dept', ['code' => '1112', 'name' => '織品系']);
 
-// 定義函式 all() 用來取得學生資料
+
+// 定義函式 all() ，用於查詢資料表中的所有資料
 // null 是要有參數，可以是空的
 function all($table = null, $where = '', $other = ''){
     // where預設為空有彈性，可以不設計where條件空白
@@ -96,31 +107,31 @@ function all($table = null, $where = '', $other = ''){
 }
 
 
-// 2023-11-20 find()回傳一筆指定資料
+// 2023-11-20 定義一個函數 find，用於按條件查詢單筆資料。
 function find($table, $id)
 {
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
-    $sql = "select * from `$table`";
+    // $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
+    // $pdo = new PDO($dsn, 'root', '');
+    global $pdo;
+    $sql = "select * from `$table` ";
 
     // where後面的id有可能是陣列或是數字(用字串連接)
     // 叫做id但是裡面可能存陣列或是.....?
     if (is_array($id)) {
         foreach ($id as $col => $value) {
             $tmp[] = "`$col`='$value'";
+            // 取key要用單引號，因為要放到資料庫SQL語法裡面
         }
-        $sql .= " where " . join(" && ", $tmp);
+        $sql .= " where " . join(" && ",$tmp);
         // $sql .= " where ".join(" && ",[` `=>'',` `=>'' ,` `=>''])
     } else if (is_numeric($id)) {
-        $sql .= "where `id`='$id'";
+        $sql .= " where `id`='$id'";
     } else {
         echo "錯誤:參數的資料型態必須是數字或陣列";
     }
-
     // 把find()語法列出來，測試用而已，真正作品不要顯示出來
     echo 'find=>' . $sql;
     // echo for測試用
-
     $row = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     return $row;
     // return定義函式結束，要開始呼叫
