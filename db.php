@@ -19,7 +19,7 @@ echo "<hr>";
 $row = find('students', ['dept' => '1', 'graduate_at' => '23']);
 
 echo "<h3>相同條件使用 all()</h3>";
-// 呼叫函式輸出
+// 呼叫函式
 dd($rows);
 echo "<br>";
 echo "<h3>相同條件使用 find()</h3>";

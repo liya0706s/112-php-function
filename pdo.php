@@ -6,7 +6,7 @@ $pdo = new PDO($dsn, 'root', '');
 ?>
 
 <!-- 方法二用global:
-要取用function外的全域變數時使用global關鍵字
+要取用函式外的全域變數時，使用global關鍵字寫在函式內:
 在db.php最上方寫:
 $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
 $pdo = new PDO($dsn, 'root', '');
