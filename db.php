@@ -11,7 +11,7 @@ $pdo = new PDO($dsn, 'root', '');
 
 // 2023-11-17 定義函式all()
 $rows = all('students', ['dept' => '1', 'graduate_at' => '23']);
-
+echo "<hr>";
 // find()-會回傳資料表 指定id的資料，因為很常使用
 // 指定條件之後的那一筆資料還有，例如唯一特定的帳號密碼
 // 2023-11-20 find() 指定id的函式
@@ -21,18 +21,9 @@ $row = find('students', ['dept' => '1', 'graduate_at' => '23']);
 echo "<h3>相同條件使用 all()</h3>";
 // 呼叫函式輸出
 dd($rows);
-echo "<hr>";
+echo "<br>";
 echo "<h3>相同條件使用 find()</h3>";
 dd($row);
-
-$row=find('students',['dept'=>'1','graduate_at'=>'23']);
-//$rows=all('students',['dept'=>'1','graduate_at'=>'23']);
-//echo "<h3>相同條件使用find()</h3>";
-//dd($row);
-//echo "<hr>";;
-//echo "<h3>相同條件使用all()</h3>";
-//dd($rows);
-
 
 
 // 2023-11-20 用find() 測試pdo.php
@@ -54,7 +45,8 @@ $row=find('students',['dept'=>'1','graduate_at'=>'23']);
 
 // 定義函式 all() ，用於查詢資料表中的所有資料
 // null 是要有參數，可以是空的
-function all($table = null, $where = '', $other = ''){
+function all($table = null, $where = '', $other = '')
+{
     // where預設為空有彈性，可以不設計where條件空白
 
     // $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
@@ -72,7 +64,7 @@ function all($table = null, $where = '', $other = ''){
              * $sql="select * from `table` from where `dept`='2' && `graduate_at` = '12'"
              */
 
-             // 檢查陣列是否不為空，如果不是空，表示有指定具體的查詢條件
+            // 檢查陣列是否不為空，如果不是空，表示有指定具體的查詢條件
             if (!empty($where)) {
                 // 使用 foreach 遍歷陣列，將每個鍵值對轉換為 SQL 查詢中的條件
                 foreach ($where as $col => $value) {
@@ -81,10 +73,11 @@ function all($table = null, $where = '', $other = ''){
                 }
                 // 使用 join 函式將條件陣列用 "&&" 連接成字符串，並添加到 SQL 查詢語句中
                 $sql .= " where " . join(" && ", $tmp);
-            } else {
-                // 如果 $where 不是陣列，直接將其添加到 SQL 查詢語句中
-                $sql .= " $where";
             }
+        } else {
+            // 如果 $where 不是陣列，直接將其添加到 SQL 查詢語句中
+            $sql .= " $where";
+        }
         // 將其他 SQL 語句（例如 ORDER BY、LIMIT 等）添加到 SQL 查詢語句中
         $sql .= $other;
 
@@ -122,7 +115,7 @@ function find($table, $id)
             $tmp[] = "`$col`='$value'";
             // 取key要用單引號，因為要放到資料庫SQL語法裡面
         }
-        $sql .= " where " . join(" && ",$tmp);
+        $sql .= " where " . join(" && ", $tmp);
         // $sql .= " where ".join(" && ",[` `=>'',` `=>'' ,` `=>''])
     } else if (is_numeric($id)) {
         $sql .= " where `id`='$id'";
@@ -252,5 +245,4 @@ function dd($array)
     echo "<pre>";
     print_r($array);
     echo "</pre>";
-}
 }
